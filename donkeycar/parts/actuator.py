@@ -364,6 +364,33 @@ class Maestro:
 
         return ret
 
+class SerialMotionControl:
+    '''
+    Custom controller, sending control commands to a
+    microcontroller (i.e. arduino) which may be interpreted in 
+    various ways depending on configuration
+    '''
+
+    def __init__(self, options=None):
+        '''
+        - open serial port
+        - send configuration options to the motion controller
+        '''
+        
+        import serial
+
+    def run(self):
+        '''
+        send lateral and longitudinal control commands
+        to the motion controller in a 
+        '''
+        pass
+
+    def shutdown(self):
+        pass
+        
+
+
 class Teensy:
     '''
     Teensy Servo controller
