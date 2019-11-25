@@ -370,24 +370,41 @@ class SerialMotionControl:
     microcontroller (i.e. arduino) which may be interpreted in 
     various ways depending on configuration
     '''
+    import serial
 
     def __init__(self, options=None):
         '''
         - open serial port
         - send configuration options to the motion controller
         '''
-        
-        import serial
+        if options is None:
+            options = {"serial": "/dev/ttyUSB0", "baud": 115200}
 
-    def run(self):
+        self.ser = serial.Serial(
+            options.get("serial", "/dev/ttyUSB0"), 
+            options.get("baud", 115200))
+        self.ser.close()
+        self.ser.open()
+        self.steer = 0.0
+        self.speed = 0.0
+        
+
+    def run(self, angle, throttle):
         '''
         send lateral and longitudinal control commands
-        to the motion controller in a 
+        to the motion controller. 
         '''
-        pass
+        # transform to an integer
+        thr_out = int(max(0.0, min(200.0, -throttle * 200.0)))
+        str_out = int(max(0.0, min(200.0, (-angle*100.0) + 100.0)))
+        # send binary message
+        self.ser.write(bytes([99]))
+        self.ser.write(bytes([thr_out]))
+        self.ser.write(bytes([str_out]))
+        self.ser.write(bytes([255]))
 
     def shutdown(self):
-        pass
+        self.ser.close()
         
 
 

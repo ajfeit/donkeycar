@@ -443,7 +443,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         pass
 
     elif cfg.DRIVE_TRAIN_TYPE == "SERVO_ESC":
-        from donkeycar.parts.actuator import PCA9685, PWMSteering, PWMThrottle
+        from donkeycar.parts.actuator import PCA9685, PWMSteering, PWMThrottle, SerialMotionControl
 
         steering_controller = PCA9685(cfg.STEERING_CHANNEL, cfg.PCA9685_I2C_ADDR, busnum=cfg.PCA9685_I2C_BUSNUM)
         steering = PWMSteering(controller=steering_controller,
@@ -500,6 +500,11 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
         V.add(steering, inputs=['angle'])
         V.add(motor, inputs=["throttle"])
+
+    elif cfg.DRIVE_TRAIN_TYPE == "SERIAL_MOTION_CONTROL":
+        from donkeycar.parts.actuator import SerialMotionControl
+        motion_control = SerialMotionControl()
+        V.add(motion_control, inputs=['angle', 'throttle'])
 
     
     #add tub to save data
