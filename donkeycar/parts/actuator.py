@@ -383,7 +383,7 @@ class SerialMotionControl:
 
         self.ser = serial.Serial(
                 options.get("serial", "/dev/ttyUSB0"), 
-                options.get("baud", 115200)
+                options.get("baud", 115200),
                 write_timeout=0
             )
         self.ser.close()
