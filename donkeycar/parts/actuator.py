@@ -370,13 +370,14 @@ class SerialMotionControl:
     microcontroller (i.e. arduino) which may be interpreted in 
     various ways depending on configuration
     '''
-    import serial
 
     def __init__(self, options=None):
         '''
         - open serial port
         - send configuration options to the motion controller
         '''
+        import serial
+
         if options is None:
             options = {"serial": "/dev/ttyUSB0", "baud": 115200}
 
