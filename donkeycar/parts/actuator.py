@@ -382,8 +382,10 @@ class SerialMotionControl:
             options = {"serial": "/dev/ttyUSB0", "baud": 115200}
 
         self.ser = serial.Serial(
-            options.get("serial", "/dev/ttyUSB0"), 
-            options.get("baud", 115200))
+                options.get("serial", "/dev/ttyUSB0"), 
+                options.get("baud", 115200)
+                write_timeout=0
+            )
         self.ser.close()
         self.ser.open()
         self.steer = 0.0
@@ -399,10 +401,13 @@ class SerialMotionControl:
         thr_out = int(max(0.0, min(200.0, -throttle * 200.0)))
         str_out = int(max(0.0, min(200.0, (-angle*100.0) + 100.0)))
         # send binary message
+        '''
         self.ser.write(bytes([99]))
         self.ser.write(bytes([thr_out]))
         self.ser.write(bytes([str_out]))
         self.ser.write(bytes([255]))
+        '''
+        self.ser.write(bytearray([99, thr_out, str_out, 255]))
 
     def shutdown(self):
         self.ser.close()
